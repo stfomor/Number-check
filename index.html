@@ -877,5 +877,54 @@
         console.log('শুরুর নাম্বার এবং ম্যাক্সিমাম নাম্বার পরিবর্তন করে চেক করতে পারেন।');
         console.log('ফিক্সড পজিশন ব্যবহার করে নির্দিষ্ট ডিজিট ফিক্স করতে পারেন।');
     </script>
+
+        <div class="visitor-box">
+  <h3>🌐 Total Visitors</h3>
+  <div id="visitorCount">Loading...</div>
+</div>
+
+<style>
+.visitor-box {
+  width: 250px;
+  margin: 30px auto;
+  padding: 20px;
+  text-align: center;
+  border: 2px solid #00eaff;
+  border-radius: 15px;
+  background: #111;
+  color: white;
+  font-family: Arial, sans-serif;
+  box-shadow: 0 0 20px #00eaff;
+  animation: glow 2s infinite alternate;
+}
+
+#visitorCount {
+  font-size: 35px;
+  font-weight: bold;
+  color: #00ff99;
+  margin-top: 10px;
+}
+
+@keyframes glow {
+  from {
+    box-shadow: 0 0 10px #00eaff;
+  }
+  to {
+    box-shadow: 0 0 30px #00eaff;
+  }
+}
+</style>
+
+<script>
+fetch("https://api.countapi.xyz/hit/Number_CHECK/visits")
+.then(response => response.json())
+.then(data => {
+    document.getElementById("visitorCount").innerHTML = data.value;
+})
+.catch(() => {
+    document.getElementById("visitorCount").innerHTML = "Error";
+});
+</script>
 </body>
+
 </html>
