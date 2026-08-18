@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
+
     <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-25F8ZLXDC6"></script>
 <script>
@@ -12,7 +13,7 @@
 </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>রবি নাম্বার চেকার</title>
+    <title>রবি নাম্বার চেকার - ফাস্ট</title>
     <style>
         * {
             margin: 0;
@@ -39,29 +40,6 @@
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
-        }
-
-        /* ভিজিটর কাউন্টারের স্টাইল */
-        .visitor-counter {
-            text-align: center;
-            margin-bottom: 20px;
-            padding: 12px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-        }
-        
-        .visitor-counter span {
-            color: white;
-            font-weight: bold;
-            font-size: 18px;
-        }
-        
-        .visitor-counter .count {
-            color: #ffd700;
-            font-size: 24px;
-            font-weight: bold;
-            margin-left: 5px;
         }
 
         .container::-webkit-scrollbar {
@@ -215,6 +193,7 @@
         .btn-stop {
             background: #dc3545;
             color: white;
+            grid-column: 1 / -1;
         }
 
         .btn-stop:hover {
@@ -229,6 +208,16 @@
 
         .btn-clear:hover {
             background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn-speed {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-speed:hover {
+            background: #218838;
             transform: translateY(-2px);
         }
 
@@ -268,7 +257,7 @@
 
         .stats {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 15px;
             margin-top: 15px;
         }
@@ -295,6 +284,10 @@
 
         .stat-item.available .number {
             color: #28a745;
+        }
+
+        .stat-item.speed .number {
+            color: #ff9800;
         }
 
         .results-section {
@@ -373,6 +366,10 @@
             color: #ff9800;
         }
 
+        .log-entry.speed {
+            color: #ff9800;
+        }
+
         @media (max-width: 600px) {
             .container {
                 padding: 20px;
@@ -383,7 +380,7 @@
             }
 
             .stats {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr 1fr;
             }
 
             .button-group {
@@ -418,21 +415,75 @@
             color: white;
         }
 
+        .status-badge.completed {
+            background: #28a745;
+            color: white;
+        }
+
         #statusText {
             text-align: center;
             margin: 10px 0;
         }
+
+        .speed-control {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin: 10px 0;
+        }
+
+        .speed-control label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #555;
+            margin: 0;
+        }
+
+        .speed-control input[type="range"] {
+            flex: 1;
+            accent-color: #667eea;
+        }
+
+        .speed-control span {
+            font-size: 14px;
+            font-weight: 600;
+            color: #667eea;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .batch-size-control {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin: 10px 0;
+        }
+
+        .batch-size-control label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #555;
+            margin: 0;
+        }
+
+        .batch-size-control select {
+            padding: 5px 10px;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+            font-size: 14px;
+            background: white;
+        }
+
+        .batch-size-control select:focus {
+            border-color: #667eea;
+            outline: none;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- ভিজিটর কাউন্টার -->
-        <div class="visitor-counter">
-            <span>👥 মোট ভিজিটর:</span>
-            <span class="count" id="visitorCount">০</span>
-        </div>
 
-        <h1>📱 রবি নাম্বার চেকার</h1>
+    <div class="container">
+        <h1>⚡ রবি নাম্বার চেকার (ফাস্ট)</h1>
 
         <form id="checkerForm">
             <div class="form-group">
@@ -451,6 +502,24 @@
                 <label for="maxNumbers">ম্যাক্সিমাম নাম্বার চেক করবে</label>
                 <input type="number" id="maxNumbers" placeholder="যেমন: 1000" value="99999">
                 <div class="helper-text">কতটি নাম্বার চেক করবে (খালি রাখলে সব চেক করবে)</div>
+            </div>
+
+            <div class="speed-control">
+                <label for="speedControl">⚡ গতি:</label>
+                <input type="range" id="speedControl" min="1" max="20" value="10">
+                <span id="speedLabel">১০x</span>
+            </div>
+
+            <div class="batch-size-control">
+                <label for="batchSizeControl">📦 ব্যাচ সাইজ:</label>
+                <select id="batchSizeControl">
+                    <option value="5">৫</option>
+                    <option value="10" selected>১০</option>
+                    <option value="20">২০</option>
+                    <option value="30">৩০</option>
+                    <option value="50">৫০</option>
+                    <option value="100">১০০</option>
+                </select>
             </div>
 
             <div class="fixed-positions">
@@ -498,7 +567,7 @@
         </form>
 
         <div id="statusText">
-            <span class="status-badge idle">স্টপড</span>
+            <span class="status-badge idle">প্রস্তুত</span>
         </div>
 
         <div class="progress-section">
@@ -519,6 +588,10 @@
                     <div class="number" id="totalCount">০</div>
                     <div class="label">মোট</div>
                 </div>
+                <div class="stat-item speed">
+                    <div class="number" id="speedDisplay">০</div>
+                    <div class="label">প্রতি সেকেন্ডে</div>
+                </div>
             </div>
         </div>
 
@@ -538,20 +611,7 @@
     </div>
 
     <script>
-        // ========== ভিজিটর কাউন্টার ==========
-        // কাউন্টার ইনক্রিমেন্ট এবং ডিসপ্লে আপডেট
-        fetch("https://api.countapi.xyz/hit/stfomor-number-check/visits")
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById("visitorCount").innerHTML = data.value;
-            })
-            .catch(error => {
-                console.error("কাউন্টার লোড করতে সমস্যা:", error);
-                document.getElementById("visitorCount").innerHTML = "⚠️";
-            });
-
-        // ========== মূল অ্যাপ্লিকেশন ==========
-        class RobiNumberChecker {
+        class FastRobiNumberChecker {
             constructor() {
                 this.isRunning = false;
                 this.availableNumbers = [];
@@ -559,11 +619,15 @@
                 this.numbersChecked = 0;
                 this.totalToCheck = 0;
                 this.retryQueue = [];
-                this.maxRetries = 3;
-                this.workers = [];
-                this.currentBatch = [];
+                this.maxRetries = 2;
                 this.startTime = null;
-                this.generator = null;
+                this.speedCounter = 0;
+                this.speedInterval = null;
+                this.batchSize = 10;
+                this.delayMs = 50;
+                this.concurrencyLimit = 10;
+                this.cache = new Map();
+                this.abortController = null;
             }
 
             addLog(message, type = 'info') {
@@ -575,7 +639,6 @@
                 logDiv.appendChild(entry);
                 logDiv.scrollTop = logDiv.scrollHeight;
                 
-                // Keep only last 100 logs
                 while (logDiv.children.length > 100) {
                     logDiv.removeChild(logDiv.firstChild);
                 }
@@ -593,17 +656,16 @@
                 const badge = document.querySelector('.status-badge');
                 badge.className = `status-badge ${status}`;
                 const texts = {
-                    'running': 'চলছে...',
-                    'stopped': 'স্টপড',
-                    'idle': 'প্রস্তুত',
-                    'completed': 'সম্পন্ন'
+                    'running': '🚀 চলছে...',
+                    'stopped': '⏹️ স্টপড',
+                    'idle': '⏸️ প্রস্তুত',
+                    'completed': '✅ সম্পন্ন'
                 };
                 badge.textContent = texts[status] || status;
             }
 
             addResult(number) {
                 const list = document.getElementById('resultsList');
-                // Remove "No results" message if exists
                 const noResultMsg = list.querySelector('p');
                 if (noResultMsg) {
                     list.innerHTML = '';
@@ -630,9 +692,7 @@
 
             *generateNumbers(baseNumber, startFrom, maxNumbers, fixedPositions) {
                 let count = 0;
-                const remainingDigits = 8 - Object.keys(fixedPositions).length;
                 
-                // If startFrom is provided
                 if (startFrom) {
                     let startNum = parseInt(startFrom);
                     if (isNaN(startNum)) startNum = 0;
@@ -656,7 +716,6 @@
                         }
                     }
                 } else {
-                    // Generate all combinations
                     const digitRanges = Array(8).fill(null).map((_, i) => {
                         if (i in fixedPositions) {
                             return [fixedPositions[i]];
@@ -685,12 +744,14 @@
             }
 
             async checkNumber(number) {
+                // Check cache first
+                if (this.cache.has(number)) {
+                    return this.cache.get(number);
+                }
+
                 if (this.checkedNumbers.has(number)) return true;
                 
                 const url = 'https://da-api.robi.com.bd/da-nll/free-msisdn/get-msisdn-list';
-                const headers = {
-                    'Content-Type': 'application/json'
-                };
                 const payload = {
                     msisdn: number,
                     brand: 'ROBI',
@@ -699,12 +760,11 @@
 
                 for (let attempt = 0; attempt < this.maxRetries; attempt++) {
                     try {
-                        await new Promise(resolve => setTimeout(resolve, 100 + Math.random() * 400));
-                        
                         const response = await fetch(url, {
                             method: 'POST',
-                            headers: headers,
-                            body: JSON.stringify(payload)
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload),
+                            signal: this.abortController?.signal
                         });
 
                         if (response.ok) {
@@ -712,7 +772,10 @@
                             this.checkedNumbers.add(number);
                             this.numbersChecked++;
                             
-                            if (data.available === true) {
+                            const isAvailable = data.available === true;
+                            this.cache.set(number, isAvailable);
+                            
+                            if (isAvailable) {
                                 this.availableNumbers.push(number);
                                 this.addResult(number);
                                 this.addLog(`✅ পাওয়া গেছে: ${number}`, 'success');
@@ -720,25 +783,24 @@
                             }
                             
                             this.updateProgress();
-                            return true;
-                        } else {
-                            this.addLog(`⚠️ ত্রুটি ${number}: Status ${response.status}`, 'warning');
+                            this.speedCounter++;
+                            return isAvailable;
                         }
                     } catch (error) {
-                        this.addLog(`❌ ত্রুটি ${number}: ${error.message}`, 'error');
+                        if (error.name === 'AbortError') {
+                            throw error;
+                        }
                     }
-                    
-                    await new Promise(resolve => setTimeout(resolve, 1000));
                 }
                 
                 if (!this.checkedNumbers.has(number)) {
                     this.retryQueue.push(number);
                 }
+                this.cache.set(number, false);
                 return false;
             }
 
             saveNumber(number) {
-                // Save to localStorage for persistence
                 const saved = JSON.parse(localStorage.getItem('robiAvailableNumbers') || '[]');
                 if (!saved.includes(number)) {
                     saved.push(number);
@@ -757,18 +819,15 @@
                 document.getElementById('availableCount').textContent = this.availableNumbers.length;
             }
 
-            async processRetryQueue() {
-                if (this.retryQueue.length === 0) return;
-                
-                this.addLog(`🔄 রিট্রাই কিউ প্রসেস করা হচ্ছে... (${this.retryQueue.length} টি)`, 'info');
-                const queueCopy = [...this.retryQueue];
-                this.retryQueue = [];
-                
-                for (const number of queueCopy) {
-                    if (!this.isRunning) break;
-                    await this.checkNumber(number);
-                    await new Promise(resolve => setTimeout(resolve, 200));
-                }
+            async processBatch(numbers) {
+                const promises = numbers.map(num => this.checkNumber(num));
+                return await Promise.allSettled(promises);
+            }
+
+            updateSpeedDisplay() {
+                const speed = this.speedCounter;
+                document.getElementById('speedDisplay').textContent = speed;
+                this.speedCounter = 0;
             }
 
             async run() {
@@ -777,36 +836,40 @@
                     return;
                 }
 
-                // Get form values
                 const baseNumber = document.getElementById('baseNumber').value;
                 const startNumber = document.getElementById('startNumber').value.trim() || null;
                 const maxNumbers = document.getElementById('maxNumbers').value;
                 const maxToCheck = maxNumbers ? parseInt(maxNumbers) : null;
                 const fixedPositions = this.getFixedPositions();
+                const speedValue = parseInt(document.getElementById('speedControl').value);
+                this.batchSize = parseInt(document.getElementById('batchSizeControl').value);
+                this.delayMs = Math.max(10, 500 / speedValue);
+                this.concurrencyLimit = Math.min(20, speedValue * 2);
 
-                // Validate
                 if (!baseNumber) {
                     this.addLog('❌ বেস নাম্বার দিন!', 'error');
                     return;
                 }
 
                 this.isRunning = true;
+                this.abortController = new AbortController();
                 this.availableNumbers = [];
                 this.checkedNumbers = new Set();
                 this.numbersChecked = 0;
                 this.retryQueue = [];
                 this.startTime = Date.now();
+                this.speedCounter = 0;
                 
-                // Load previously saved numbers
                 this.loadSavedNumbers();
 
-                // Update UI
                 document.getElementById('startBtn').textContent = '⏹️ থামান';
-                document.getElementById('startBtn').classList.remove('btn-start');
-                document.getElementById('startBtn').classList.add('btn-stop');
+                document.getElementById('startBtn').className = 'btn-stop';
                 this.updateStatus('running');
                 
-                this.addLog(`🚀 চেক করা শুরু করছি...`, 'info');
+                // Start speed display update
+                this.speedInterval = setInterval(() => this.updateSpeedDisplay(), 1000);
+
+                this.addLog(`🚀 চেক করা শুরু করছি... (গতি: ${speedValue}x)`, 'info');
                 this.addLog(`📌 বেস নাম্বার: ${baseNumber}`, 'info');
                 if (startNumber) this.addLog(`📌 শুরু: ${startNumber}`, 'info');
                 if (maxToCheck) this.addLog(`📌 ম্যাক্সিমাম: ${maxToCheck} টি`, 'info');
@@ -814,17 +877,13 @@
                     this.addLog(`📌 ফিক্সড পজিশন: ${JSON.stringify(fixedPositions)}`, 'info');
                 }
 
-                // Generate numbers
                 const generator = this.generateNumbers(baseNumber, startNumber, maxToCheck, fixedPositions);
-                
-                // Calculate total for progress
-                this.totalToCheck = maxToCheck || 1000000; // Approximate if no limit
+                this.totalToCheck = maxToCheck || 1000000;
                 this.updateProgress();
 
-                // Process in batches
-                const batchSize = 10;
                 let batch = [];
                 let totalGenerated = 0;
+                let processedBatches = 0;
 
                 try {
                     for (const number of generator) {
@@ -837,62 +896,94 @@
                         totalGenerated++;
                         this.totalToCheck = maxToCheck || totalGenerated + 1000;
 
-                        if (batch.length >= batchSize) {
-                            // Process batch
-                            const promises = batch.map(num => this.checkNumber(num));
-                            await Promise.allSettled(promises);
+                        if (batch.length >= this.batchSize) {
+                            await this.processBatch(batch);
                             batch = [];
+                            processedBatches++;
                             
-                            // Add small delay between batches
-                            await new Promise(resolve => setTimeout(resolve, 500));
+                            // Dynamic delay based on speed
+                            if (this.delayMs > 0 && processedBatches % 5 === 0) {
+                                await new Promise(resolve => setTimeout(resolve, this.delayMs));
+                            }
                         }
                     }
 
                     // Process remaining batch
                     if (batch.length > 0 && this.isRunning) {
-                        const promises = batch.map(num => this.checkNumber(num));
-                        await Promise.allSettled(promises);
+                        await this.processBatch(batch);
                     }
 
                 } catch (error) {
-                    this.addLog(`❌ ত্রুটি: ${error.message}`, 'error');
+                    if (error.name !== 'AbortError') {
+                        this.addLog(`❌ ত্রুটি: ${error.message}`, 'error');
+                    }
                 }
 
-                // Process retry queue
-                if (this.isRunning) {
-                    await this.processRetryQueue();
+                // Process retry queue with priority
+                if (this.isRunning && this.retryQueue.length > 0) {
+                    this.addLog(`🔄 রিট্রাই করা হচ্ছে... (${this.retryQueue.length} টি)`, 'info');
+                    const retryBatch = [...this.retryQueue];
+                    this.retryQueue = [];
+                    
+                    for (let i = 0; i < retryBatch.length; i += this.batchSize) {
+                        if (!this.isRunning) break;
+                        const chunk = retryBatch.slice(i, i + this.batchSize);
+                        await this.processBatch(chunk);
+                        await new Promise(resolve => setTimeout(resolve, this.delayMs));
+                    }
                 }
 
                 // Final update
-                const elapsed = ((Date.now() - this.startTime) / 1000).toFixed(1);
-                this.addLog(`✅ সম্পন্ন! ${elapsed} সেকেন্ডে ${this.numbersChecked} টি নাম্বার চেক করা হয়েছে`, 'success');
-                this.addLog(`📊 পাওয়া গেছে: ${this.availableNumbers.length} টি নাম্বার`, 'success');
+                const elapsed = ((Date.now() - this.startTime) / 1000);
+                const speed = elapsed > 0 ? Math.round(this.numbersChecked / elapsed) : 0;
+                this.addLog(`✅ সম্পন্ন! ${elapsed.toFixed(1)} সেকেন্ডে ${this.numbersChecked} টি চেক করা হয়েছে`, 'success');
+                this.addLog(`📊 পাওয়া গেছে: ${this.availableNumbers.length} টি নাম্বার (গড় ${speed}/সেকেন্ড)`, 'success');
                 
                 this.updateStatus('completed');
                 document.getElementById('startBtn').textContent = '🔄 পুনরায় চেক করুন';
-                document.getElementById('startBtn').classList.remove('btn-stop');
-                document.getElementById('startBtn').classList.add('btn-start');
+                document.getElementById('startBtn').className = 'btn-start';
                 this.isRunning = false;
+                
+                if (this.speedInterval) {
+                    clearInterval(this.speedInterval);
+                    this.speedInterval = null;
+                }
+                
+                document.getElementById('speedDisplay').textContent = speed;
             }
 
             stop() {
                 if (this.isRunning) {
                     this.isRunning = false;
+                    if (this.abortController) {
+                        this.abortController.abort();
+                    }
                     this.addLog('⏹️ থামানোর অনুরোধ করা হয়েছে...', 'warning');
                     this.updateStatus('stopped');
                     document.getElementById('startBtn').textContent = '🚀 চেক করা শুরু করুন';
-                    document.getElementById('startBtn').classList.remove('btn-stop');
-                    document.getElementById('startBtn').classList.add('btn-start');
+                    document.getElementById('startBtn').className = 'btn-start';
+                    
+                    if (this.speedInterval) {
+                        clearInterval(this.speedInterval);
+                        this.speedInterval = null;
+                    }
                 }
             }
         }
 
-        // Initialize the checker
-        const checker = new RobiNumberChecker();
+        // Initialize
+        const checker = new FastRobiNumberChecker();
 
-        // Load saved numbers on startup
         window.addEventListener('DOMContentLoaded', () => {
             checker.loadSavedNumbers();
+            
+            // Speed control label
+            const speedControl = document.getElementById('speedControl');
+            const speedLabel = document.getElementById('speedLabel');
+            speedControl.addEventListener('input', function() {
+                const val = this.value;
+                speedLabel.textContent = `${val}x`;
+            });
         });
 
         // Event listeners
@@ -911,19 +1002,20 @@
             });
         });
 
-        // Clear results
+        // Keyboard shortcut
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                if (checker.isRunning) {
-                    checker.stop();
-                }
+            if (e.key === 'Escape' && checker.isRunning) {
+                checker.stop();
+            }
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                document.getElementById('startBtn').click();
             }
         });
 
-        // Add some example presets
-        console.log('রবি নাম্বার চেকার লোড হয়েছে!');
-        console.log('শুরুর নাম্বার এবং ম্যাক্সিমাম নাম্বার পরিবর্তন করে চেক করতে পারেন।');
-        console.log('ফিক্সড পজিশন ব্যবহার করে নির্দিষ্ট ডিজিট ফিক্স করতে পারেন।');
+        console.log('⚡ রবি নাম্বার চেকার (ফাস্ট) লোড হয়েছে!');
+        console.log('📌 গতি বাড়াতে স্লাইডার ব্যবহার করুন');
+        console.log('⌨️ Ctrl+Enter দিয়ে শুরু/থামান');
     </script>
 </body>
 </html>
