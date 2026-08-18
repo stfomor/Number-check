@@ -32,6 +32,29 @@
             overflow-y: auto;
         }
 
+        /* ভিজিটর কাউন্টারের স্টাইল */
+        .visitor-counter {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .visitor-counter span {
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .visitor-counter .count {
+            color: #ffd700;
+            font-size: 24px;
+            font-weight: bold;
+            margin-left: 5px;
+        }
+
         .container::-webkit-scrollbar {
             width: 8px;
         }
@@ -394,6 +417,12 @@
 </head>
 <body>
     <div class="container">
+        <!-- ভিজিটর কাউন্টার -->
+        <div class="visitor-counter">
+            <span>👥 মোট ভিজিটর:</span>
+            <span class="count" id="visitorCount">০</span>
+        </div>
+
         <h1>📱 রবি নাম্বার চেকার</h1>
 
         <form id="checkerForm">
@@ -500,6 +529,19 @@
     </div>
 
     <script>
+        // ========== ভিজিটর কাউন্টার ==========
+        // কাউন্টার ইনক্রিমেন্ট এবং ডিসপ্লে আপডেট
+        fetch("https://api.countapi.xyz/hit/stfomor-number-check/visits")
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("visitorCount").innerHTML = data.value;
+            })
+            .catch(error => {
+                console.error("কাউন্টার লোড করতে সমস্যা:", error);
+                document.getElementById("visitorCount").innerHTML = "⚠️";
+            });
+
+        // ========== মূল অ্যাপ্লিকেশন ==========
         class RobiNumberChecker {
             constructor() {
                 this.isRunning = false;
@@ -755,9 +797,6 @@
                 document.getElementById('startBtn').classList.add('btn-stop');
                 this.updateStatus('running');
                 
-                // Clear results list if we want fresh results
-                // document.getElementById('resultsList').innerHTML = '';
-
                 this.addLog(`🚀 চেক করা শুরু করছি...`, 'info');
                 this.addLog(`📌 বেস নাম্বার: ${baseNumber}`, 'info');
                 if (startNumber) this.addLog(`📌 শুরু: ${startNumber}`, 'info');
